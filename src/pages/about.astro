@@ -1,0 +1,107 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Seam from '../components/Seam.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { site } from '../data/site';
+
+const values = [
+  {
+    title: 'Done right the first time',
+    body: 'A weld either holds or it doesn\'t. Every joint is laid to stand up under load, weather, and time — not to just look finished.',
+  },
+  {
+    title: 'We come to you',
+    body: 'Mobile setup means the work happens where the steel is — your farm, shop, jobsite, or a breakdown in the middle of a field.',
+  },
+  {
+    title: 'Straight answers',
+    body: 'You get an honest read on what the job actually needs and what it\'ll take to do it — no upsell, no runaround.',
+  },
+  {
+    title: 'Licensed & insured',
+    body: 'Structural and pipe certified, fully insured, and accountable for the work that leaves with our name on it.',
+  },
+];
+---
+
+<Layout
+  title="About"
+  description="Ramey's Welding Services is a Fulton, MS welding and dirt-work operation — structural and pipe certified, licensed, insured, and mobile across Northeast Mississippi."
+  path="/about"
+>
+  <section class="relative overflow-hidden border-b border-steel-700/70">
+    <div class="absolute inset-0 -z-10" style="background: radial-gradient(110% 90% at 20% 0%, #20242e 0%, #14161b 50%, #0e0f12 100%);"></div>
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-arc">About the shop</p>
+      <h1 class="mt-4 max-w-3xl font-display text-5xl font-extrabold uppercase text-cream sm:text-7xl">
+        Built on holding up our end
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ash">
+        Ramey's Welding Services is a {site.cityState}-based operation covering
+        welding, custom fabrication, and dirt work for folks across Northeast
+        Mississippi — from one-off repairs to full builds and site prep.
+      </p>
+    </div>
+  </section>
+
+  <!-- Owner story — Brian, swap this copy for your own. -->
+  <section class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
+    <h2 class="font-display text-3xl font-bold uppercase text-cream sm:text-4xl">Our story</h2>
+    <div class="mt-3 h-0.5 w-14 spark-rule"></div>
+    <div class="mt-6 space-y-4 text-base leading-relaxed text-ash">
+      <p>
+        Ramey's was started on a simple idea: do good work for people in your own
+        community, charge them fair, and stand behind every job. That's still how
+        it runs today.
+      </p>
+      <p>
+        Between the welder and the equipment, there isn't much across steel and
+        site work that we can't take on — and if it's not something we should be
+        the ones doing, we'll tell you that too.
+      </p>
+      <!--
+        TODO (Brian): replace the two paragraphs above with your own story —
+        how long you've been welding, the kind of work you're proudest of,
+        what people in the area know you for. Real specifics build trust.
+      -->
+    </div>
+  </section>
+
+  <Seam />
+
+  <!-- Values -->
+  <section class="bg-steel-900 py-16 sm:py-24">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h2 class="font-display text-4xl font-bold uppercase text-cream sm:text-5xl">How we work</h2>
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        {values.map((v) => (
+          <div class="rounded-xl border border-steel-700 bg-steel-850 p-7">
+            <h3 class="font-display text-2xl font-bold uppercase text-arc">{v.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ash">{v.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Seam />
+
+  <!-- Service area -->
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+    <p class="font-mono text-xs uppercase tracking-[0.2em] text-arc">Where we work</p>
+    <h2 class="mt-2 font-display text-4xl font-bold uppercase text-cream sm:text-5xl">Across Northeast Mississippi</h2>
+    <p class="mt-4 max-w-2xl text-base leading-relaxed text-ash">
+      Based in Fulton and serving the surrounding towns and counties. If you're
+      nearby and don't see your town listed, call anyway — odds are we can get to you.
+    </p>
+    <ul class="mt-8 flex flex-wrap gap-3">
+      {site.areas.map((a) => (
+        <li class="rounded-full border border-steel-700 bg-steel-900 px-4 py-2 font-mono text-xs uppercase tracking-wider text-ash">{a}</li>
+      ))}
+    </ul>
+  </section>
+
+  <Seam />
+
+  <ContactSection />
+</Layout>

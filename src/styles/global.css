@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+/* ── BRAND TOKENS ─────────────────────────────────────────────────────────────
+   Exposed to Tailwind as utilities: bg-steel-900, text-arc, border-spark,
+   font-display, etc. Change a value here and it updates everywhere.            */
+@theme {
+  --color-steel-950: #0e0f12; /* page background */
+  --color-steel-900: #14161b; /* panels */
+  --color-steel-850: #181b22;
+  --color-steel-800: #20242e; /* raised cards */
+  --color-steel-700: #2c3240; /* hairline borders */
+  --color-steel-600: #444b5a;
+  --color-steel-500: #6b7281; /* muted icons */
+
+  --color-arc: #ffc20e;       /* caution yellow (logo) — the accent */
+  --color-arc-deep: #e0a800;
+  --color-spark: #ff6a1a;     /* hot-metal orange — the signature glow */
+
+  --color-cream: #edeae3;     /* primary text on dark */
+  --color-ash: #aeb2bc;       /* secondary text */
+
+  --font-display: "Saira Condensed", system-ui, sans-serif;
+  --font-body: "Archivo", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* offset for the sticky header when jumping to #anchors */
+    scroll-padding-top: 5.5rem;
+  }
+  body {
+    background-color: var(--color-steel-950);
+    color: var(--color-cream);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    line-height: 0.98;
+  }
+  ::selection {
+    background: var(--color-arc);
+    color: #000;
+  }
+}
+
+/* ── SIGNATURE: the weld seam ──────────────────────────────────────────────────
+   A thin bead of light with a hot bloom where the arc strikes. Used as the
+   divider between every section so the welding world is built into the layout
+   structure itself, not pasted on as decoration.                              */
+.weld-seam {
+  position: relative;
+  height: 2px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-arc-deep) 12%,
+    var(--color-arc) 50%,
+    var(--color-arc-deep) 88%,
+    transparent
+  );
+}
+.weld-seam::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background: var(--color-spark);
+  box-shadow:
+    0 0 16px 5px rgba(255, 106, 26, 0.6),
+    0 0 38px 12px rgba(255, 106, 26, 0.22);
+  animation: arc-flicker 3.4s ease-in-out infinite;
+}
+
+@keyframes arc-flicker {
+  0%, 100% { opacity: 0.85; }
+  45% { opacity: 1; }
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 22px 7px rgba(255, 106, 26, 0.85),
+      0 0 52px 16px rgba(255, 106, 26, 0.3);
+  }
+  55% { opacity: 0.92; }
+}
+
+/* Hot underline used on links / eyebrows */
+.spark-rule {
+  background: linear-gradient(90deg, var(--color-arc), var(--color-spark));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

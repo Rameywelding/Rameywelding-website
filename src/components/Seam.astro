@@ -1,0 +1,8 @@
+---
+// The signature divider. Place between sections.
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+---
+<div class:list={['mx-auto max-w-6xl px-4 sm:px-6', cls]} aria-hidden="true">
+  <div class="weld-seam"></div>
+</div>

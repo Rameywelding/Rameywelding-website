@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import logo from '../assets/logo.png';
+
+const current = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? current === '/' : current.startsWith(href);
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-steel-700/70 bg-steel-950/85 backdrop-blur-md"
+>
+  <div class="mx-auto flex h-22 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <!-- Logo -->
+    <a href="/" class="flex shrink-0 items-center" aria-label={`${site.name} — home`}>
+      <Image
+        src={logo}
+        alt={site.name}
+        width={440}
+        height={245}
+        class="h-14 w-auto sm:h-20"
+        loading="eager"
+      />
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden items-center gap-8 md:flex" aria-label="Primary">
+      {site.nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'font-mono text-sm uppercase tracking-wider transition-colors',
+            isActive(item.href) ? 'text-arc' : 'text-ash hover:text-cream',
+          ]}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+      <a
+        href={site.phoneHref}
+        class="group inline-flex items-center gap-2 rounded-md bg-arc px-4 py-2 font-display text-lg font-bold uppercase tracking-wide text-black transition-transform hover:-translate-y-0.5"
+      >
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.3 1l-2.2 2.2Z"/>
+        </svg>
+        {site.phone}
+      </a>
+    </nav>
+
+    <!-- Mobile toggle -->
+    <button
+      id="menu-toggle"
+      class="inline-flex h-11 w-11 items-center justify-center rounded-md border border-steel-700 text-cream md:hidden"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg id="icon-open" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/>
+      </svg>
+      <svg id="icon-close" class="hidden h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M6 6l12 12M18 6 6 18" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <nav
+    id="mobile-menu"
+    class="hidden border-t border-steel-700/70 bg-steel-900 md:hidden"
+    aria-label="Mobile"
+  >
+    <div class="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4 sm:px-6">
+      {site.nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'rounded-md px-3 py-3 font-mono text-sm uppercase tracking-wider',
+            isActive(item.href) ? 'bg-steel-800 text-arc' : 'text-ash hover:bg-steel-800 hover:text-cream',
+          ]}
+        >
+          {item.label}
+        </a>
+      ))}
+      <a
+        href={site.phoneHref}
+        class="mt-2 inline-flex items-center justify-center gap-2 rounded-md bg-arc px-4 py-3 font-display text-xl font-bold uppercase tracking-wide text-black"
+      >
+        Call {site.phone}
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const open = document.getElementById('icon-open');
+  const close = document.getElementById('icon-close');
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('hidden') === false;
+    open?.classList.toggle('hidden', isOpen);
+    close?.classList.toggle('hidden', !isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+  });
+  // close on navigation tap
+  menu?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      open?.classList.remove('hidden');
+      close?.classList.add('hidden');
+      toggle?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>

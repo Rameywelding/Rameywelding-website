@@ -1,0 +1,116 @@
+---
+import { Image } from 'astro:assets';
+import { galleryImages } from '../data/images';
+
+const hasImages = galleryImages.length > 0;
+---
+
+<section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20" aria-labelledby="gallery-heading">
+  <div class="flex items-end justify-between gap-4">
+    <div>
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-arc">The work</p>
+      <h2 id="gallery-heading" class="mt-2 font-display text-4xl font-bold uppercase text-cream sm:text-5xl">
+        Recent jobs
+      </h2>
+    </div>
+  </div>
+
+  {hasImages ? (
+    <div class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      {galleryImages.map((img, i) => (
+        <button
+          type="button"
+          class="group relative overflow-hidden rounded-md border border-steel-700 bg-steel-900 focus-visible:outline-2 focus-visible:outline-arc"
+          data-lightbox-index={i}
+          aria-label={`Open photo ${i + 1}`}
+        >
+          <Image
+            src={img}
+            alt={`Ramey's Welding Services job photo ${i + 1}`}
+            widths={[300, 600]}
+            sizes="(max-width: 640px) 50vw, 25vw"
+            class="aspect-square h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          <span class="pointer-events-none absolute inset-0 bg-spark/0 transition-colors group-hover:bg-spark/10"></span>
+        </button>
+      ))}
+    </div>
+  ) : (
+    <div class="mt-10 flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-steel-700 bg-steel-900/60 py-20 text-center">
+      <p class="font-mono text-xs uppercase tracking-wider text-steel-500">
+        Job photos coming soon
+      </p>
+    </div>
+  )}
+</section>
+
+{hasImages && (
+  <>
+    <!-- Lightbox -->
+    <div
+      id="lightbox"
+      class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Photo viewer"
+    >
+      <button
+        id="lb-close"
+        class="absolute right-4 top-4 inline-flex h-12 w-12 items-center justify-center rounded-md border border-steel-600 text-cream hover:border-arc hover:text-arc"
+        aria-label="Close"
+      >
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18" stroke-linecap="round"/></svg>
+      </button>
+      <button id="lb-prev" class="absolute left-2 inline-flex h-12 w-12 items-center justify-center rounded-md text-cream hover:text-arc sm:left-6" aria-label="Previous">
+        <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <img id="lb-image" class="max-h-[85vh] max-w-[90vw] rounded-lg object-contain" alt="" />
+      <button id="lb-next" class="absolute right-2 inline-flex h-12 w-12 items-center justify-center rounded-md text-cream hover:text-arc sm:right-6" aria-label="Next">
+        <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <script>
+      const sources = Array.from(
+        document.querySelectorAll('[data-lightbox-index] img'),
+      ).map((el) => (el as HTMLImageElement).currentSrc || (el as HTMLImageElement).src);
+
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lb-image') as HTMLImageElement | null;
+      let idx = 0;
+
+      const show = (i: number) => {
+        if (!lbImg) return;
+        idx = (i + sources.length) % sources.length;
+        lbImg.src = sources[idx];
+      };
+      const open = (i: number) => {
+        show(i);
+        lb?.classList.remove('hidden');
+        lb?.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      };
+      const close = () => {
+        lb?.classList.add('hidden');
+        lb?.classList.remove('flex');
+        document.body.style.overflow = '';
+      };
+
+      document.querySelectorAll('[data-lightbox-index]').forEach((btn) => {
+        btn.addEventListener('click', () =>
+          open(Number((btn as HTMLElement).dataset.lightboxIndex)),
+        );
+      });
+      document.getElementById('lb-close')?.addEventListener('click', close);
+      document.getElementById('lb-next')?.addEventListener('click', () => show(idx + 1));
+      document.getElementById('lb-prev')?.addEventListener('click', () => show(idx - 1));
+      lb?.addEventListener('click', (e) => { if (e.target === lb) close(); });
+      document.addEventListener('keydown', (e) => {
+        if (lb?.classList.contains('hidden')) return;
+        if (e.key === 'Escape') close();
+        if (e.key === 'ArrowRight') show(idx + 1);
+        if (e.key === 'ArrowLeft') show(idx - 1);
+      });
+    </script>
+  </>
+)}

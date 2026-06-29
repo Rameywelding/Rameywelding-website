@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Seam from '../components/Seam.astro';
+import ServiceRow from '../components/ServiceRow.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { site } from '../data/site';
+import { serviceGroups } from '../data/services';
+---
+
+<Layout
+  title="Services"
+  description="Welding, fabrication, and dirt work from Ramey's Welding Services in Fulton, MS — MIG, TIG & stick welding, plasma cutting, mobile welding, excavation, core drilling, and trenching."
+  path="/services"
+>
+  <!-- Page header -->
+  <section class="relative overflow-hidden border-b border-steel-700/70">
+    <div class="absolute inset-0 -z-10" style="background: radial-gradient(110% 90% at 85% 0%, #20242e 0%, #14161b 50%, #0e0f12 100%);"></div>
+    <div class="absolute inset-0 -z-10 opacity-[0.04]" style="background: repeating-linear-gradient(45deg,#ffc20e 0 22px,transparent 22px 60px);" aria-hidden="true"></div>
+
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-arc">{site.cityState} · {site.credentials}</p>
+      <h1 class="mt-4 max-w-3xl font-display text-5xl font-extrabold uppercase text-cream sm:text-7xl">
+        Everything we do, in one place
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ash">
+        From precision welds to moving earth — here's the full rundown. Pricing
+        depends on the job, so when you've found what you need,
+        <a href="#contact" class="text-arc underline decoration-spark/60 underline-offset-4 hover:text-spark">jump down to request a quote</a>.
+      </p>
+
+      <!-- quick-jump chips -->
+      <div class="mt-9 flex flex-wrap gap-2.5">
+        {serviceGroups.flatMap((g) => g.services).map((s) => (
+          <a href={`#${s.slug}`} class="rounded-full border border-steel-700 bg-steel-900 px-4 py-2 font-mono text-xs uppercase tracking-wider text-ash transition-colors hover:border-arc hover:text-arc">
+            {s.title}
+          </a>
+        ))}
+      </div>
+
+      <a href="#contact" class="mt-8 inline-flex items-center gap-2 rounded-md bg-arc px-6 py-3 font-display text-xl font-bold uppercase tracking-wide text-black transition-transform hover:-translate-y-0.5">
+        Skip to contact <span aria-hidden="true">↓</span>
+      </a>
+    </div>
+  </section>
+
+  {serviceGroups.map((group, gi) => (
+    <section class:list={['py-16 sm:py-24', gi % 2 === 1 && 'bg-steel-900']} aria-labelledby={`grp-${group.id}`}>
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="max-w-2xl">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-spark">{group.eyebrow}</p>
+          <h2 id={`grp-${group.id}`} class="mt-2 font-display text-4xl font-bold uppercase text-cream sm:text-5xl">{group.label}</h2>
+          <p class="mt-4 text-base leading-relaxed text-ash">{group.intro}</p>
+        </div>
+
+        <div class="mt-14 space-y-16 sm:space-y-24">
+          {group.services.map((s, i) => (
+            <ServiceRow service={s} reverse={i % 2 === 1} />
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <Seam />
+
+  <ContactSection />
+</Layout>

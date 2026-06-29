@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Seam from '../components/Seam.astro';
+import Gallery from '../components/Gallery.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { site } from '../data/site';
+import { serviceGroups } from '../data/services';
+---
+
+<Layout>
+  <Hero />
+
+  <Seam />
+
+  <!-- SERVICES PREVIEW -->
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24" aria-labelledby="services-heading">
+    <div class="max-w-2xl">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-arc">What we do</p>
+      <h2 id="services-heading" class="mt-2 font-display text-4xl font-bold uppercase text-cream sm:text-6xl">
+        Two trades, one crew
+      </h2>
+      <p class="mt-5 text-lg leading-relaxed text-ash">
+        Steel work and ground work under one number. Whether you need a weld that
+        holds or a site that's ready to build on, the job gets done right the
+        first time.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-2">
+      {serviceGroups.map((group) => (
+        <div class="flex flex-col rounded-xl border border-steel-700 bg-steel-900 p-7 sm:p-8">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-spark">{group.eyebrow}</p>
+          <h3 class="mt-2 font-display text-3xl font-bold uppercase text-cream">{group.label}</h3>
+          <p class="mt-4 text-sm leading-relaxed text-ash">{group.intro}</p>
+          <ul class="mt-6 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+            {group.services.map((s) => (
+              <li class="flex items-start gap-2.5 text-sm text-cream">
+                <svg class="mt-1 h-4 w-4 shrink-0 text-arc" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.4 2.8 8l1.1-1.1 2.3 2.2 5-5L12.3 5l-6.1 6.4Z"/></svg>
+                <a href={`/services#${s.slug}`} class="hover:text-arc">{s.title}</a>
+              </li>
+            ))}
+          </ul>
+          <a href="/services" class="mt-7 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-arc hover:text-spark">
+            See {group.label.toLowerCase()} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <Seam />
+
+  <!-- ABOUT PREVIEW -->
+  <section class="bg-steel-900" aria-labelledby="about-heading">
+    <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-arc">Who you're calling</p>
+        <h2 id="about-heading" class="mt-2 font-display text-4xl font-bold uppercase text-cream sm:text-5xl">
+          A local hand you can count on
+        </h2>
+        <p class="mt-5 max-w-xl text-lg leading-relaxed text-ash">
+          Ramey's Welding Services is a Fulton-based operation built on doing
+          honest work and standing behind it. Structural and pipe certified,
+          licensed, and insured — with the mobile setup to bring the work to you
+          across Northeast Mississippi.
+        </p>
+        <a href="/about" class="mt-7 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-arc hover:text-spark">
+          More about us <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <div class="lg:col-span-5">
+        <dl class="grid grid-cols-2 gap-4">
+          {[
+            { k: 'Licensed', v: 'Structural & pipe' },
+            { k: 'Insured', v: 'Fully covered' },
+            { k: 'Mobile', v: 'We come to you' },
+            { k: 'Local', v: 'Fulton, MS' },
+          ].map((item) => (
+            <div class="rounded-lg border border-steel-700 bg-steel-850 p-5">
+              <dt class="font-display text-2xl font-bold uppercase text-arc">{item.k}</dt>
+              <dd class="mt-1 text-sm text-ash">{item.v}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <Seam />
+
+  <Gallery />
+
+  <Seam />
+
+  <ContactSection />
+</Layout>

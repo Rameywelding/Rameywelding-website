@@ -1,0 +1,101 @@
+---
+import { site } from '../data/site';
+import { allServices } from '../data/services';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Override the canonical path, e.g. "/services" */
+  path?: string;
+}
+
+const {
+  title,
+  description = site.description,
+  path = Astro.url.pathname,
+} = Astro.props;
+
+const pageTitle = title
+  ? `${title} · ${site.shortName}`
+  : `${site.name} · Welding & Dirt Work · ${site.cityState}`;
+
+const canonical = new URL(path, site.url).href;
+const ogImage = new URL('/og-image.jpg', site.url).href;
+
+// LocalBusiness structured data — helps Google understand the service area.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'GeneralContractor',
+  name: site.name,
+  image: ogImage,
+  url: site.url,
+  telephone: `+1-${site.phone}`,
+  email: site.email,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Fulton',
+    addressRegion: 'MS',
+    addressCountry: 'US',
+  },
+  areaServed: site.areas.map((a) => ({ '@type': 'City', name: `${a}, MS` })),
+  openingHours: 'Mo-Fr',
+  makesOffer: allServices.map((s) => ({
+    '@type': 'Offer',
+    itemOffered: { '@type': 'Service', name: s.title },
+  })),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#0e0f12" />
+
+    <!-- Fonts: industrial condensed display + grotesk body + technical mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-arc focus:px-4 focus:py-2 focus:font-semibold focus:text-black"
+    >
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
