@@ -8,6 +8,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://rameywelding.com',
   output: 'static',
+  security: {
+    checkOrigin: false,
+  },
   adapter: vercel({
     webAnalytics: { enabled: true },
   }),
